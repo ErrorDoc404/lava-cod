@@ -1,14 +1,16 @@
+const GuildConfig = require("../mongoose/database/schemas/GuildConfig");
+
 module.exports = async (client, interaction) => {
 
   let MusicDB = await client.GetMusic(interaction.guildId);
-  if(!MusicDB) return console.log('Guild not Found');
+  // if(!MusicDB) return console.log('Guild not Found');
 
   //Initialize GuildDB
   if (!MusicDB) {
-      MusicDB = await client.database.guild.set(interaction.guildId, {
-          prefix: client.config.prefix,
-          musicChannelId: null,
-      });
+    MusicDB = await GuildConfig.create({
+      guildId: interaction.guildId,
+      prefix: '!',
+    });
   }
 
   if(interaction.isButton()){

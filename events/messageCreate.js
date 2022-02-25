@@ -1,5 +1,6 @@
 module.exports = async (client, message) => {
   let MusicDB = await client.GetMusic(message.guild.id);
+  if(!MusicDB) return;
   if(!MusicDB.musicChannelId) return;
   if(message.channel.id == MusicDB.musicChannelId){
     if(message.author.bot) {

@@ -19,6 +19,7 @@ module.exports = {
 
     // lavalink server
     lavalink: {
+      id: "KartaDharta",
       host: process.env.LAVALINK_HOST || 'localhost',
       port: parseInt(process.env.LAVALINK_PORT) || 80,
       password: process.env.LAVALINK_PASSWORD || 'secret',

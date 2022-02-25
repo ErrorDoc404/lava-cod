@@ -8,6 +8,9 @@ const GuildConfig = require("../mongoose/database/schemas/GuildConfig");
 const play = require('../music/play.js');
 const { Manager } = require("erela.js");
 const { LavasfyClient } = require("lavasfy");
+const deezer = require("erela.js-deezer");
+const apple = require("erela.js-apple");
+const facebook = require("erela.js-facebook");
 
 class DiscordActivityBot extends Client {
 
@@ -37,7 +40,7 @@ class DiscordActivityBot extends Client {
         {
           clientID: this.config.Spotify.ClientID,
           clientSecret: this.config.Spotify.ClientSecret,
-          playlistLoadLimit: 3,
+          playlistLoadLimit: 100,
           audioOnlyResults: true,
           autoResolve: true,
           useSpotifyMetadata: true
@@ -54,6 +57,12 @@ class DiscordActivityBot extends Client {
 
       // Initiate the Manager with some options and listen to some events.
       this.manager = new Manager({
+        // plugins
+        plugins: [
+          new deezer(),
+          new apple(),
+          new facebook(),
+        ],
         // Pass an array of node.
         nodes: [this.config.lavalink],
         // A send method to send data to the Discord WebSocket using your library.

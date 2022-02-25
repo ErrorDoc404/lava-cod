@@ -33,27 +33,14 @@ module.exports = {
 
       if (!player) return message.channel.send(`❌ | **Nothing is playing right now...**`);
 
-      // Connect to the voice channel.
-      if (player.state != "CONNECTED") await player.connect();
-
-      try{
+      // try{
         if (SearchString.match(client.Lavasfy.spotifyPattern)){
-          await client.Lavasfy.requestToken();
-          let node = client.Lavasfy.nodes.get(client.config.lavalink.host);
-          let Searched = await node.load(SearchString);
-
-          if (Searched.loadType === "PLAYLIST_LOADED") {
-            let songs = [];
-            for (let i = 0; i < Searched.tracks.length; i++) songs.push(TrackUtils.build(Searched.tracks[i], message.author));
-            player.queue.add(songs);
-            if (!player.playing && !player.paused && player.queue.totalSize === Searched.tracks.length) player.play();
-          } else if (Searched.loadType.startsWith("TRACK")) {
-            player.queue.add(TrackUtils.build(Searched.tracks[0], message.author));
-            if (!player.playing && !player.paused && !player.queue.size) player.play();
-          } else {
-            return message.channel.send(`**No matches found for -** ${SearchString}`);
-          }
+          return message.channel.send('Spotify plugins is currently disable. please wait for future updates');
         }else {
+          // Connect to the voice channel.
+          if (player.state != "CONNECTED") await player.connect();
+
+          
           let Searched = await client.manager.search(SearchString, message.author);
           if (!player) return message.channel.send(`❌ | **Nothing is playing right now...**`);
 
@@ -74,8 +61,8 @@ module.exports = {
           content = client.musicMessage.content.replace(`${(player.queue.length - 1)} Songs in Queue` , `${player.queue.length} Songs in Queue`);
           client.musicMessage.edit({content: content});
         }
-      } catch (e) {
-            message.channel.send(`**No matches found for - ** ${SearchString} with ${e}`);
-      }
+      // } catch (e) {
+      //       message.channel.send(`**No matches found for - ** ${SearchString} with ${e}`);
+      // }
     }
 };
