@@ -1,9 +1,8 @@
 module.exports = async (client, message) => {
   let MusicDB = await client.GetMusic(message.guild.id);
-
+  if(!MusicDB.musicChannelId) return;
   if(message.channel.id == MusicDB.musicChannelId){
     if(message.author.bot) {
-      if(message.id === MusicDB.musicMessageId) return;
       setTimeout(() => message.delete(), 3000);
     } else {
       message.delete();

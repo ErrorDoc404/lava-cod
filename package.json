@@ -16,6 +16,7 @@
     "discord.js": "^13.6.0",
     "dotenv": "^16.0.0",
     "erela.js": "^2.3.3",
+    "lavasfy": "^2.3.0",
     "mongoose": "^6.2.3"
   }
 }

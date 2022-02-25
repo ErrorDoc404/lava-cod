@@ -20,9 +20,14 @@ module.exports = {
     // lavalink server
     lavalink: {
       host: process.env.LAVALINK_HOST || 'localhost',
-      port: process.env.LAVALINK_PORT || 3000,
+      port: parseInt(process.env.LAVALINK_PORT) || 80,
       password: process.env.LAVALINK_PASSWORD || 'secret',
       secure: process.env.LAVALINK_SECURE || false,
+    },
+
+    Spotify: {
+      ClientID: process.env.Spotify_ClientID || "", //Spotify Client ID
+      ClientSecret: process.env.Spotify_ClientSecret || "", //Spotify Client Secret
     },
 
     mongooseURL: process.env.MONGOOSE_URL || "",

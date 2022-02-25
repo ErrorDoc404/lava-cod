@@ -7,6 +7,7 @@ const mongoose = require('mongoose');
 const GuildConfig = require("../mongoose/database/schemas/GuildConfig");
 const play = require('../music/play.js');
 const { Manager } = require("erela.js");
+const { LavasfyClient } = require("lavasfy");
 
 class DiscordActivityBot extends Client {
 
@@ -31,6 +32,26 @@ class DiscordActivityBot extends Client {
 
       var client = this;
 
+      // Lavasfy
+      this.Lavasfy = new LavasfyClient(
+        {
+          clientID: this.config.Spotify.ClientID,
+          clientSecret: this.config.Spotify.ClientSecret,
+          playlistLoadLimit: 3,
+          audioOnlyResults: true,
+          autoResolve: true,
+          useSpotifyMetadata: true
+        },
+        [
+          {
+            id: this.config.lavalink.id,
+            host: this.config.lavalink.host,
+            port: this.config.lavalink.port,
+            password: this.config.lavalink.pass,
+          },
+        ]
+      );
+
       // Initiate the Manager with some options and listen to some events.
       this.manager = new Manager({
         // Pass an array of node.
@@ -45,13 +66,13 @@ class DiscordActivityBot extends Client {
         .on("nodeError", (node, error) => logger.error(`Node ${node.options.identifier} had an error: ${error.message}`))
         .on("trackStart", (player, track) => {
           let content;
+          const musicMsg = client.musicMessage;
           if(player.queue.length == 0)
             content = `**[ Now Playing ]**\n${track.title}.`;
           else {
             content = `\n**[ Now Playing ]**\n${track.title}.\n**[ ${player.queue.length} Songs in Queue ]**`;
             musicMsg.edit({content: content});
           };
-          const musicMsg = client.musicMessage;
           const musicEmbed = musicMsg.embeds[0];
           const thumbnail = track.thumbnail.replace('default', 'hqdefault');
           const msgEmbed = {

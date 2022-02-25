@@ -2,6 +2,7 @@ module.exports = {
   name: 'stop',
   run: async (client, interaction, parms, {MusicDB}) => {
     let player = await client.manager.get(interaction.guildId);
+    if (!member.voice.channel) return client.sendTime(interaction, "❌ | **You must be in a voice channel to use this command.**");
     if(!interaction.member.permissions.has('MOVE_MEMBERS')) return interaction.reply({content: `You dont have permission to do that`}).catch(err => {client.error(err)});
     if(!player) return interaction.reply({content: `Nothing is playing right now`}).catch(err => {client.error(err)});
     player.destroy();
