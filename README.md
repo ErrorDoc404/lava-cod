@@ -7,7 +7,7 @@ Activity is advance discord music bot with button interaction
 Use the package manager [Node v16](https://nodejs.org/en/download/) to install diapedesis in project.
 
 ```bash
-node install
+npm install
 ```
 
 ## Config
