@@ -4,7 +4,7 @@ const { DiscordTogether } = require('discord-together');
 
 
 module.exports = {
-    name: "youtube",
+    name: "checkers",
     description: "Starts a YouTube Together session",
     usage: "",
     permissions: {
@@ -31,13 +31,13 @@ module.exports = {
             if (!member.voice.channel) return interaction.reply("❌ | You must be in a voice channel to use this command.").catch((err)=> {client.warn(err)});
             if(!member.voice.channel.permissionsFor(guild.me).has("CREATE_INSTANT_INVITE")) return interaction.reply("❌ | **Bot doesn't have Create Invite Permission**").catch((err)=> {client.warn(err)});
 
-            client.discordTogether.createTogetherCode(member.voice.channel.id, 'youtube').then(async invite => {
+            client.discordTogether.createTogetherCode(member.voice.channel.id, 'checkers').then(async invite => {
                 let embed = new MessageEmbed()
-                    .setAuthor({name: "Youtube Together"})
+                    .setAuthor({name: "Checkers"})
                     .setColor("#FF0000")
                     .setDescription(`
-                        You can Play Youtube Together with your friends in a Voice Channel. Click *Join Youtube Together* to join in!
-                        __**[Join Youtube Together](${invite.code})**__
+                        You can Play Checkers with your friends in a Voice Channel. Click *Join Checkers* to join in!
+                        __**[Join Checkers](${invite.code})**__
                         ⚠ **Note:** This only works in Desktop
                         `)
                 return interaction.reply({embeds: [embed]}).catch((err)=> {client.warn(err)});
