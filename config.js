@@ -8,11 +8,11 @@ module.exports = {
     Token: process.env.TOKEN || 'bot token',
 
     presence: {
-        status: "idle", // online, idle, and dnd(invisible too but it make people think the bot is offline)
+        status: "active", // online, idle, and dnd(invisible too but it make people think the bot is offline)
         activities: [
             {
-              name: "Server", //Status Text
-              type: "WATCHING", // PLAYING, WATCHING, LISTENING, STREAMING
+              name: "Music", //Status Text
+              type: "LISTENING", // PLAYING, WATCHING, LISTENING, STREAMING
             },
         ],
     },
