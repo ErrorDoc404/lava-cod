@@ -31,6 +31,7 @@ module.exports = {
      * @param {*} param3
      */
         run: async (client, interaction, args, { MusicDB }) => {
+          if(!interaction.member.permissions.has('MANAGE_GUILD')) return interaction.reply(`you dont have manage guild permission to run this command`).catch(err => {client.error(err)});
           const music_channel = args.channel;
           const embed = {
               title: `🎵 Vibing Music 🎵`,
