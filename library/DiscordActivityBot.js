@@ -1,4 +1,4 @@
-const { Client, Collection, MessageEmbed } = require('discord.js');
+const { Client, Collection, MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
 const Logger = require("./Logger");
 const logger = new Logger();
 const ConfigFetcher = require('../config');
@@ -19,9 +19,10 @@ class DiscordActivityBot extends Client {
 
       this.config = ConfigFetcher;
 
-      this.musicMessage = null;
-      this.skipSong = false;
-      this.skipBy = null;
+      this.musicMessage = [];
+
+      this.skipSong = [];
+      this.skipBy = [];
 
       this.SlashCommands = new Collection();
       this.Commands = new Collection();
@@ -75,7 +76,7 @@ class DiscordActivityBot extends Client {
         .on("nodeError", (node, error) => logger.error(`Node ${node.options.identifier} had an error: ${error.message}`))
         .on("trackStart", (player, track) => {
           let content;
-          const musicMsg = client.musicMessage;
+          const musicMsg = client.musicMessage[player.guild];
           if(player.queue.length == 0)
             content = `**[ Now Playing ]**\n${track.title}.`;
           else {
@@ -93,18 +94,25 @@ class DiscordActivityBot extends Client {
               thumbnail: {
                 url: track.thumbnail,
               },
+              footer: {
+                text: `🔊 Volume: ${player.volume}`,
+                 iconURL: `${client.user.avatarURL()}`,
+             },
             };
           const playEmbed = new MessageEmbed(msgEmbed);
           playEmbed.addField(`Requested By`, `${track.requester.username}`, true);
-          if(client.skipSong && client.skipBy) {
-            playEmbed.addField(`Skip By`, `${client.skipBy.username}`, true);
-            client.skipSong = false;
-            client.skipBy = null;
+          if(client.skipSong[player.guild] && client.skipBy[player.guild]) {
+            playEmbed.addField(`Skip By`, `${client.skipBy[player.guild].username}`, true);
+            client.skipSong[player.guild] = false;
+            client.skipBy[player.guild] = false;
           }
           musicMsg.edit({content: content, embeds: [playEmbed]});
         })
         .on("queueEnd", (player) => {
-          const musicMsg = client.musicMessage;
+          const musicMsg = client.musicMessage[player.guild];
+          client.skipSong[player.guild] = false;
+          client.skipBy[player.guild] = false;
+          let description = null;
           const embed = {
               title: `🎵 Vibing Music 🎵`,
               description: `Anything you type in this channel will be interpreted as a video title`,
@@ -115,9 +123,59 @@ class DiscordActivityBot extends Client {
               thumbnail: {
                 url: 'https://i.imgur.com/Za8NXjk.png',
               },
-            };
+              footer: {
+                text: `${client.user.username} Music`,
+                 iconURL: `${client.user.avatarURL()}`,
+               },
+          };
 
-          musicMsg.edit({content: `**[ Nothing Playing ]**\nJoin a voice channel and queue songs by name or url in here.`, embeds: [embed]});
+          const row = new MessageActionRow().addComponents([
+            new MessageButton()
+              .setCustomId('pause')
+              .setLabel('⏸️ Pause')
+              .setStyle('PRIMARY'),
+            new MessageButton()
+              .setCustomId('skip')
+              .setLabel('⏭️ Skip')
+              .setStyle('SECONDARY'),
+            // new MessageButton()
+            //   .setCustomId('loop')
+            //   .setLabel('🔁 Loop')
+            //   .setStyle('DANGER'),
+            new MessageButton()
+              .setCustomId('stop')
+              .setLabel('⏹️ Stop')
+              .setStyle('SECONDARY'),
+            new MessageButton()
+              .setCustomId('fix')
+              .setLabel('⚒️ Repair')
+              .setStyle('SECONDARY'),
+          ]);
+
+          // const row1 = new MessageActionRow().addComponents([
+          //   new MessageButton()
+          //     .setCustomId('minvolume')
+          //     .setLabel('🔈 Vol -')
+          //     .setStyle('SECONDARY'),
+          //   new MessageButton()
+          //     .setCustomId('addvolume')
+          //     .setLabel('🔊 Vol +')
+          //     .setStyle('SECONDARY'),
+          //   new MessageButton()
+          //     .setCustomId('clear')
+          //     .setLabel('🗑️ Clear')
+          //     .setStyle('SECONDARY'),
+          //   new MessageButton()
+          //     .setCustomId('grab')
+          //     .setLabel('🎣 Grab')
+          //     .setStyle('SECONDARY'),
+          //   new MessageButton()
+          //     .setCustomId('track')
+          //     .setLabel('⏭️ Track')
+          //     .setStyle('SECONDARY'),
+          // ]);
+
+          musicMsg.edit({content: `**[ Nothing Playing ]**\nJoin a voice channel and queue songs by name or url in here.`, embeds: [embed], components: [row]});
 
           player.destroy();
         });

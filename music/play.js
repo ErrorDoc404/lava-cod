@@ -21,7 +21,7 @@ module.exports = {
 
       if (!CheckNode || !CheckNode.connected) message.channel.send(`❌ | **Lavalink node not connected**`);
 
-      client.musicMessage = await message.channel.messages.fetch(MusicDB.musicMessageId);
+      client.musicMessage[message.guild.id] = await message.channel.messages.fetch(MusicDB.musicMessageId);
 
       // Create a new player. This will return the player if it already exists.
       const player = client.manager.create({
@@ -40,7 +40,7 @@ module.exports = {
           // Connect to the voice channel.
           if (player.state != "CONNECTED") await player.connect();
 
-          
+
           let Searched = await client.manager.search(SearchString, message.author);
           if (!player) return message.channel.send(`❌ | **Nothing is playing right now...**`);
 
@@ -55,11 +55,11 @@ module.exports = {
         }
 
         if(player.queue.length == 1){
-          content = client.musicMessage.content + `\n**[ ${player.queue.length} Songs in Queue ]**`;
-          client.musicMessage.edit({content: content});
+          content = client.musicMessage[message.guild.id].content + `\n**[ ${player.queue.length} Songs in Queue ]**`;
+          client.musicMessage[message.guild.id].edit({content: content});
         } else if(player.queue.length > 1) {
-          content = client.musicMessage.content.replace(`${(player.queue.length - 1)} Songs in Queue` , `${player.queue.length} Songs in Queue`);
-          client.musicMessage.edit({content: content});
+          content = client.musicMessage[message.guild.id].content.replace(`${(player.queue.length - 1)} Songs in Queue` , `${player.queue.length} Songs in Queue`);
+          client.musicMessage[message.guild.id].edit({content: content});
         }
       // } catch (e) {
       //       message.channel.send(`**No matches found for - ** ${SearchString} with ${e}`);
