@@ -1,6 +1,6 @@
-# Activity
+# Lava Cod
 
-Activity is advance discord music bot with button interaction
+Lava Cod is advance discord music bot with button interaction
 
 # Installation
 
@@ -34,7 +34,7 @@ LAVALINK_SECURE=
 
 ## Run
 ```bash
-node .
+node index.js
 ```
 
 ## Contributing
@@ -42,8 +42,8 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 
 Please make sure to update tests as appropriate.
 
-<a href="https://github.com/ErrorDoc404/activity/graphs/contributors">
-  <img src="https://contributors-img.web.app/image?repo=ErrorDoc404/activity" />
+<a href="https://github.com/ErrorDoc404/lava-cod/graphs/contributors">
+  <img src="https://contributors-img.web.app/image?repo=ErrorDoc404/lava-cod" />
 </a>
 
 ## License
